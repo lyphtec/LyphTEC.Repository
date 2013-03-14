@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{88E70C
 		Common\CommonAssemblyInfo.cs = Common\CommonAssemblyInfo.cs
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyphTEC.Repository.Tests", "LyphTEC.Repository.Tests\LyphTEC.Repository.Tests.csproj", "{B8207CAC-D6B0-4305-90F3-7CDE4020A814}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A8AA5FC7-D2F1-4FD2-9D7B-0C71341D6D3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8AA5FC7-D2F1-4FD2-9D7B-0C71341D6D3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A8AA5FC7-D2F1-4FD2-9D7B-0C71341D6D3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

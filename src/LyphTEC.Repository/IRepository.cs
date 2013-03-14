@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -9,6 +10,7 @@ namespace LyphTEC.Repository
     /// A simple repository interface
     /// </summary>
     /// <typeparam name="TEntity"></typeparam>
+    [ContractClass(typeof(Contracts.Repository<>))]
     public interface IRepository<TEntity> where TEntity : class, IEntity
     {
         TEntity Save(TEntity entity);
