@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
@@ -15,6 +16,8 @@ namespace LyphTEC.Repository
     /// </summary>
     /// <remarks>We are assuming the TEntity.Id field to be an integer</remarks>
     /// <typeparam name="TEntity"></typeparam>
+    [Export(typeof(IRepository<>))]
+    [Export(typeof(IRepositoryAsync<>))]
     public class InMemoryRepository<TEntity> : IRepository<TEntity>, IRepositoryAsync<TEntity>
         where TEntity : class, IEntity
     {

@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LyphTEC.Repository.Tests.Domain;
 using Xunit;
 using ServiceStack.Text;
+using System.ComponentModel.Composition;
 
 namespace LyphTEC.Repository.Tests
 {
     public class InMemoryRepositoryTest
     {
         private readonly InMemoryRepository<Customer> _repo = new InMemoryRepository<Customer>();
-
+        
         private Customer AddCustomer(string firstName = "John", string lastName = "Smith", string email = "jsmith@acme.com", string company = "ACME")
         {
             var cust = new Customer
@@ -198,5 +200,35 @@ namespace LyphTEC.Repository.Tests
             
             _repo.All().PrintDump();
         }
+
+
+        [Import] private IRepository<Customer> _mefCustomerRepo;
+
+        [Fact]
+        public void MEF_Test()
+        {
+            var catalog = new AssemblyCatalog(typeof (InMemoryRepository<>).Assembly);
+            var container = new CompositionContainer(catalog);
+            container.ComposeParts(this);
+
+            _repo.RemoveAll();
+            AddCustomers();
+
+            var cust = new Customer
+                           {
+                               FirstName = "MEF",
+                               LastName = "Head",
+                               Email = "mef@acme.com",
+                               Company = "MEFFY"
+                           };
+
+            _mefCustomerRepo.Save(cust);
+            
+            Assert.True((int)cust.Id == 4);
+            Assert.True(_repo.Count() == 4);
+            
+            _repo.All().PrintDump();
+        }
+
     }
 }
