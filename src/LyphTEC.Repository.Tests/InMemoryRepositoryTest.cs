@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
+using System.Composition;
+using System.Composition.Hosting;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LyphTEC.Repository.Tests.Domain;
 using Xunit;
 using ServiceStack.Text;
-using System.ComponentModel.Composition;
 
 namespace LyphTEC.Repository.Tests
 {
@@ -202,14 +202,17 @@ namespace LyphTEC.Repository.Tests
         }
 
 
-        [Import] private IRepository<Customer> _mefCustomerRepo;
+        [Import]
+        public IRepository<Customer> MefCustomerRepo { get; set; }
 
         [Fact]
         public void MEF_Test()
         {
-            var catalog = new AssemblyCatalog(typeof (InMemoryRepository<>).Assembly);
-            var container = new CompositionContainer(catalog);
-            container.ComposeParts(this);
+            var config = new ContainerConfiguration().WithAssembly(typeof (InMemoryRepository<>).Assembly);
+            using (var container = config.CreateContainer())
+            {
+                container.SatisfyImports(this);
+            }
 
             _repo.RemoveAll();
             AddCustomers();
@@ -222,7 +225,7 @@ namespace LyphTEC.Repository.Tests
                                Company = "MEFFY"
                            };
 
-            _mefCustomerRepo.Save(cust);
+            MefCustomerRepo.Save(cust);
             
             Assert.True((int)cust.Id == 4);
             Assert.True(_repo.Count() == 4);
