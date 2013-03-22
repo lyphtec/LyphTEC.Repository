@@ -64,12 +64,14 @@
     <Compile Include="..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CommonRepositoryTest.cs" />
     <Compile Include="Domain\Address.cs" />
     <Compile Include="Domain\Customer.cs" />
     <Compile Include="Domain\Employee.cs" />
     <Compile Include="Domain\Invoice.cs" />
     <Compile Include="InMemoryRepositoryTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CustomerRepositoryFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LyphTEC.Repository\LyphTEC.Repository.csproj">

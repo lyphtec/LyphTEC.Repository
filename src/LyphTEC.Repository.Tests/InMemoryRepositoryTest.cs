@@ -11,41 +11,15 @@ using ServiceStack.Text;
 
 namespace LyphTEC.Repository.Tests
 {
-    public class InMemoryRepositoryTest
+    public class InMemoryRepositoryTest : CommonRepositoryTest, IUseFixture<CustomerRepositoryFixture>
     {
-        private readonly InMemoryRepository<Customer> _repo = new InMemoryRepository<Customer>();
-        
-        private Customer AddCustomer(string firstName = "John", string lastName = "Smith", string email = "jsmith@acme.com", string company = "ACME")
-        {
-            var cust = new Customer
-                           {
-                               FirstName = firstName,
-                               LastName = lastName,
-                               Company = company,
-                               Email = email
-                           };
-
-            return _repo.Save(cust);
-        }
-
-        private void AddCustomers()
-        {
-            var custs = new List<Customer>
-                            {
-                                AddCustomer(),
-                                AddCustomer("Jane", "Doe", "jdoe@acme.com"),
-                                AddCustomer("Jack", "Wilson", "jwilson@acme.com")
-                            };
-
-            _repo.SaveAll(custs);
-        }
-
         [Fact]
         public void Repo_Init_UsesSameDatastore()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            var cust1 = AddCustomer();
+            var cust1 = NewCustomer();
+            CustomerRepo.Save(cust1);
 
             var repo2 = new InMemoryRepository<Customer>();
 
@@ -53,133 +27,156 @@ namespace LyphTEC.Repository.Tests
 
             var cust2 = repo2.One(1);
             Assert.Equal(cust1, cust2);
+
+            DumpRepo();
         }
 
         [Fact]
-        public void Save_Succeeds()
+        public void Save_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            var cust = AddCustomer();
+            var cust = NewCustomer();
 
-            Assert.True(_repo.Count() == 1);
+            CustomerRepo.Save(cust);
+            
             Assert.True((int)cust.Id == 1);
 
-            var cust2 = AddCustomer();
+            var cust2 = NewCustomer("Jack", "Wilson", "jwilson@acme.com");
+            cust2.Address = NewAddress();
+            CustomerRepo.Save(cust2);
 
-            Assert.True(_repo.Count() == 2);
+            Assert.True(CustomerRepo.Count() == 2);
             Assert.True((int)cust2.Id == 2);
+
+            DumpRepo();
+        }
+        
+        [Fact]
+        public void SaveAll_Ok()
+        {
+            ClearRepo();
+
+            var custs = NewCustomers();
+
+            CustomerRepo.SaveAll(custs);
+
+            Assert.True(CustomerRepo.Count() == 3);
+
+            DumpRepo();
         }
 
         [Fact]
-        public void SaveAll_Succeeds()
+        public void Save_Update_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            AddCustomers();
+            var cust = NewCustomer();
+            CustomerRepo.Save(cust);
 
-            Assert.True(_repo.Count() == 3);
-
-            _repo.All().PrintDump();
-        }
-
-        [Fact]
-        public void Save_Update_Succeeds()
-        {
-            _repo.RemoveAll();
-
-            var cust = AddCustomer();
+            Console.WriteLine("Before update:");
+            cust.PrintDump();
 
             cust.Email = "updated";
 
-            var actual = _repo.Save(cust);
+            var actual = CustomerRepo.Save(cust);
 
             Assert.True(actual.Email.Equals("updated"));
+
+            Console.WriteLine("After update");
+            actual.PrintDump();
         }
 
         [Fact]
-        public void One_Linq_Succeeds()
+        public void One_Linq_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            var cust = AddCustomer();
+            var cust = NewCustomer();
+            CustomerRepo.Save(cust);
 
-            var actual = _repo.One(x => x.Email.Equals("jsmith@acme.com"));
+            var actual = CustomerRepo.One(x => x.Email.Equals("jsmith@acme.com"));
 
             Assert.NotNull(actual);
             Assert.Equal(cust, actual);
+
+            actual.PrintDump();
         }
 
         [Fact]
-        public void RemoveById_Succeeds()
+        public void RemoveById_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            AddCustomers();
+            CustomerRepo.SaveAll(NewCustomers());
 
-            _repo.Remove(2);
+            CustomerRepo.Remove(2);
 
-            Assert.True(_repo.Count() == 2);
+            Assert.True(CustomerRepo.Count() == 2);
 
-            var cust = _repo.One(2);
+            var cust = CustomerRepo.One(2);
             Assert.Null(cust);
+
+            DumpRepo();
         }
 
         [Fact]
-        public void Remove_Succeeds()
+        public void Remove_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            var cust = AddCustomer();
+            var cust = NewCustomer();
+            CustomerRepo.Save(cust);
 
-            Assert.True(_repo.Count() == 1);
-            
-            _repo.Remove(cust);
+            Assert.True(CustomerRepo.Count() == 1);
 
-            Assert.True(_repo.Count() == 0);
+            CustomerRepo.Remove(cust);
+
+            Assert.True(CustomerRepo.Count() == 0);
         }
 
         [Fact]
-        public void RemoveByIds_Succeeds()
+        public void RemoveByIds_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            AddCustomers();
-            Assert.True(_repo.Count() == 3);
-            
-            _repo.RemoveByIds(new[]{1,3});
+            CustomerRepo.SaveAll(NewCustomers());
+            Assert.True(CustomerRepo.Count() == 3);
 
-            Assert.True(_repo.Count() == 1);
-            
-            _repo.All().PrintDump();
+            CustomerRepo.RemoveByIds(new[] { 1, 3 });
+
+            Assert.True(CustomerRepo.Count() == 1);
+
+            DumpRepo();
         }
 
         [Fact]
-        public void All_Linq_Succeeds()
+        public void All_Linq_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            AddCustomers();
+            CustomerRepo.SaveAll(NewCustomers());
+            CustomerRepo.Save(NewCustomer("James", "Harrison", "jharrison@foobar.com", "FooBar"));
 
-            _repo.Save(AddCustomer("James", "Harrison", "jharrison@foobar.com", "FooBar"));
-            Assert.True(_repo.Count() == 4);
-            _repo.All().PrintDump();
+            Assert.True(CustomerRepo.Count() == 4);
+            
+            DumpRepo();
 
-            var actual = _repo.All(x => x.Company.Equals("ACME"));
+            var actual = CustomerRepo.All(x => x.Company.Equals("ACME"));
 
             Assert.True(actual.Count() == 3);
-            
+
             Console.WriteLine("After filter:");
             actual.PrintDump();
         }
 
         // async support in XUnit : http://bradwilson.typepad.com/blog/2012/01/xunit19.html
         [Fact]
-        public async Task SaveAync_Succeeds()
+        public async Task SaveAsync_Ok()
         {
-            _repo.RemoveAll();
+            ClearRepo();
 
-            AddCustomers();
+            CustomerRepo.SaveAll(NewCustomers());
 
             var cust = new Customer
                            {
@@ -191,14 +188,14 @@ namespace LyphTEC.Repository.Tests
 
             Console.WriteLine("ThreadId before await call: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
-            var actual = await _repo.SaveAsync(cust);
+            var actual = await CustomerRepoAsync.SaveAsync(cust);
 
             Console.WriteLine("ThreadId after await call: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
             Assert.True((int)actual.Id == 4);
-            Assert.True(_repo.Count() == 4);
-            
-            _repo.All().PrintDump();
+            Assert.True(CustomerRepo.Count() == 4);
+
+            DumpRepo();
         }
 
 
@@ -208,14 +205,14 @@ namespace LyphTEC.Repository.Tests
         [Fact]
         public void MEF_Test()
         {
-            var config = new ContainerConfiguration().WithAssembly(typeof (InMemoryRepository<>).Assembly);
+            var config = new ContainerConfiguration().WithAssembly(typeof(InMemoryRepository<>).Assembly);
             using (var container = config.CreateContainer())
             {
                 container.SatisfyImports(this);
             }
 
-            _repo.RemoveAll();
-            AddCustomers();
+            ClearRepo();
+            CustomerRepo.SaveAll(NewCustomers());
 
             var cust = new Customer
                            {
@@ -226,12 +223,26 @@ namespace LyphTEC.Repository.Tests
                            };
 
             MefCustomerRepo.Save(cust);
-            
+
             Assert.True((int)cust.Id == 4);
-            Assert.True(_repo.Count() == 4);
-            
-            _repo.All().PrintDump();
+            Assert.True(CustomerRepo.Count() == 4);
+
+            DumpRepo();
         }
 
+
+        #region IUseFixture<CustomerRepositoryFixture> Members
+
+        public void SetFixture(CustomerRepositoryFixture data)
+        {
+            var repo = new InMemoryRepository<Customer>();
+
+            data.Init(repo, repo);
+
+            CustomerRepo = data.CustomerRepo;
+            CustomerRepoAsync = data.CustomerRepoAsync;
+        }
+
+        #endregion
     }
 }

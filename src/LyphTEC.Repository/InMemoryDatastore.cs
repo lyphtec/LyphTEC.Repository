@@ -10,7 +10,7 @@ namespace LyphTEC.Repository
     /// <summary>
     /// Used by InMemoryRepository to store data
     /// </summary>
-    internal class InMemoryDatastore
+    internal static class InMemoryDatastore
     {
         private static readonly ConcurrentDictionary<string, ConcurrentDictionary<int, object>> Store = new ConcurrentDictionary<string, ConcurrentDictionary<int, object>>();
 
