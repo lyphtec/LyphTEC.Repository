@@ -56,12 +56,12 @@ namespace LyphTEC.Repository.Tests
             return custs;
         }
 
-        public void ClearRepo()
+        public virtual void ClearRepo()
         {
             CustomerRepo.RemoveAll();
         }
 
-        public void DumpRepo()
+        public virtual void DumpRepo()
         {
             CustomerRepo.All().PrintDump();
         }

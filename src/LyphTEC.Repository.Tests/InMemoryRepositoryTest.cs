@@ -11,7 +11,7 @@ using ServiceStack.Text;
 
 namespace LyphTEC.Repository.Tests
 {
-    public class InMemoryRepositoryTest : CommonRepositoryTest, IUseFixture<CustomerRepositoryFixture>
+    public class InMemoryRepositoryTest : CommonRepositoryTest, IUseFixture<CommonRepositoryFixture>
     {
         [Fact]
         public void Repo_Init_UsesSameDatastore()
@@ -233,14 +233,12 @@ namespace LyphTEC.Repository.Tests
 
         #region IUseFixture<CustomerRepositoryFixture> Members
 
-        public void SetFixture(CustomerRepositoryFixture data)
+        public void SetFixture(CommonRepositoryFixture data)
         {
             var repo = new InMemoryRepository<Customer>();
 
-            data.Init(repo, repo);
-
-            CustomerRepo = data.CustomerRepo;
-            CustomerRepoAsync = data.CustomerRepoAsync;
+            CustomerRepo = repo;
+            CustomerRepoAsync = repo;
         }
 
         #endregion
