@@ -2,7 +2,7 @@
 
 namespace LyphTEC.Repository
 {
-    public abstract class Entity : IEntity
+    public abstract class Entity : IEntity, IEquatable<Entity>
     {
         protected Entity()
         {
