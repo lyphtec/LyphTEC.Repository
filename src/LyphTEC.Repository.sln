@@ -32,7 +32,6 @@ Global
 		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B8207CAC-D6B0-4305-90F3-7CDE4020A814}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
