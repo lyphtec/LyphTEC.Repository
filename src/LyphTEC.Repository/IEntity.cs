@@ -2,6 +2,6 @@
 {
     public interface IEntity
     {
-        object Id { get; set; }
+        dynamic Id { get; set; }
     }
 }

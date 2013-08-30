@@ -10,7 +10,7 @@ namespace LyphTEC.Repository
             DateUpdatedUtc = DateTime.UtcNow;
         }
 
-        public virtual object Id { get; set; }
+        public virtual dynamic Id { get; set; }
 
         public override int GetHashCode()
         {
