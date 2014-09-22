@@ -4,13 +4,13 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("LyphTEC")]
 [assembly: AssemblyProduct("LyphTEC.Repository")]
-[assembly: AssemblyCopyright("Copyright \x00a9 2013. Nguyen Ly (lyphtec@gmail.com)")]
+[assembly: AssemblyCopyright("Copyright \x00a9 2013-2014. Nguyen Ly (lyphtec@gmail.com)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("0.7.3")]    // semver.org
-[assembly: AssemblyInformationalVersion("0.7.3")]   // NuGet will use this first for version info.. we want to keep the 3 digit format common to SemVer
+[assembly: AssemblyVersion("0.7.4")]    // semver.org
+[assembly: AssemblyInformationalVersion("0.7.4")]   // NuGet will use this first for version info.. we want to keep the 3 digit format common to SemVer
 [assembly: AssemblyFileVersion("1.0.0.0")]

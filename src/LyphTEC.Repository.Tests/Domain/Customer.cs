@@ -14,7 +14,5 @@ namespace LyphTEC.Repository.Tests.Domain
         public Address Address { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-
-        public object SupportRepId { get; set; }    // Ref to Employee.Id
     }
 }

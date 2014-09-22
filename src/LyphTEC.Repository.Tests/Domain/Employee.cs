@@ -13,7 +13,7 @@ namespace LyphTEC.Repository.Tests.Domain
         public string Title { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }
-        public object ReportsTo { get; set; }   // Points to Employee.Id for hierarchical relationship
+        public dynamic ReportsTo { get; set; }   // Points to Employee.Id for hierarchical relationship
         public DateTime BirthDate { get; set; }
         public DateTime HireDate { get; set; }
         public Address HomeAddress { get; set; }
