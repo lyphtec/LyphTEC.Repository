@@ -13,5 +13,7 @@ namespace LyphTEC.Repository.Tests.Domain
         public string State { get; set; }
         public string PostCode { get; set; }
         public string Country { get; set; }
+
+        public DateTime? DateAdded { get; set; }
     }
 }
