@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LyphTEC.Repository
 {
-    public abstract class Entity : IEntity, IEquatable<Entity>
+    public abstract class Entity : IEntity, IEquatable<Entity>, IEqualityComparer<Entity>
     {
         protected Entity()
         {
@@ -45,5 +46,19 @@ namespace LyphTEC.Repository
         public virtual DateTime DateCreatedUtc { get; set; }
         public virtual DateTime DateUpdatedUtc { get; set; }
 
+        public bool Equals(Entity x, Entity y)
+        {
+            return x.Equals(y);
+        }
+
+        public int GetHashCode(Entity obj)
+        {
+            if (obj.Id.GetType() == typeof(int))
+            {
+                return (int)obj.Id;
+            }
+
+            return obj.GetHashCode();
+        }
     }
 }

@@ -6,14 +6,10 @@ namespace LyphTEC.Repository.Tests
     {
         public CommonRepositoryFixture()
         {
-            var repo = new InMemoryRepository<Customer>();
-
-            CustomerRepo = repo;
-            CustomerRepoAsync = repo;
+            CustomerRepo = new InMemoryRepository<Customer>();
         }
 
         public IRepository<Customer> CustomerRepo { get; private set; }
-        public IRepositoryAsync<Customer> CustomerRepoAsync { get; private set; }
 
         public void ClearRepo()
         {

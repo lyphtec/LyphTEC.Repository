@@ -9,7 +9,7 @@
     <AssemblyTitle>LyphTEC.Repository</AssemblyTitle>
     <Description>A simple persistence agnostic repository implementation</Description>
     <Copyright>Copyright © 2013-2025. LyphTEC (lyphtec@gmail.com)</Copyright>
-    <Version>0.9.0</Version>
+    <Version>1.0.0</Version>
     <Authors>LyphTEC</Authors>
     <PackageProjectUrl>https://github.com/lyphtec/LyphTEC.Repository</PackageProjectUrl>
     <PackageIcon>logo_sqr_32.png</PackageIcon>

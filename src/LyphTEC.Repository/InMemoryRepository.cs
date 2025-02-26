@@ -5,7 +5,6 @@ using System.Composition;
 using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using LyphTEC.Repository.Extensions;
 
@@ -17,9 +16,8 @@ namespace LyphTEC.Repository
     /// <remarks>We are assuming the TEntity.Id field to be an integer</remarks>
     /// <typeparam name="TEntity"></typeparam>
     [Export(typeof(IRepository<>))]
-    [Export(typeof(IRepositoryAsync<>))]
     [Shared]
-    public class InMemoryRepository<TEntity> : IRepository<TEntity>, IRepositoryAsync<TEntity>
+    public class InMemoryRepository<TEntity> : IRepository<TEntity>
         where TEntity : class, IEntity
     {
         private readonly ConcurrentDictionary<int, object> _repo = InMemoryDatastore.GetCollection<TEntity>();
@@ -34,7 +32,7 @@ namespace LyphTEC.Repository
             return nextKey;
         }
 
-        #region IRepository<TEntity> Members
+        #region Sync Members
 
         public TEntity Save(TEntity entity)
         {
@@ -115,7 +113,7 @@ namespace LyphTEC.Repository
 
         #endregion
 
-        #region IRepositoryAsync<TEntity> Members
+        #region Async Members
 
         public Task<TEntity> SaveAsync(TEntity entity)
         {

@@ -163,7 +163,7 @@ namespace LyphTEC.Repository.Tests
 
             Console.WriteLine("ThreadId before await call: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
-            var actual = await _fixture.CustomerRepoAsync.SaveAsync(cust);
+            var actual = await _fixture.CustomerRepo.SaveAsync(cust);
 
             Console.WriteLine("ThreadId after await call: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
