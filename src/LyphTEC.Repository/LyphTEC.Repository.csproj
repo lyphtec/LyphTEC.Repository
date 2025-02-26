@@ -8,7 +8,13 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <AssemblyTitle>LyphTEC.Repository</AssemblyTitle>
     <Description>A simple persistence agnostic repository implementation</Description>
-    <Copyright></Copyright>
+    <Copyright>Copyright © 2013-2025. LyphTEC (lyphtec@gmail.com)</Copyright>
+    <Version>0.9.0</Version>
+    <Authors>LyphTEC</Authors>
+    <PackageProjectUrl>https://github.com/lyphtec/LyphTEC.Repository</PackageProjectUrl>
+    <PackageIcon>logo_sqr_32.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/lyphtec/LyphTEC.Repository</RepositoryUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
@@ -82,6 +88,16 @@
     <Compile Include="..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\Users\lypht\OneDrive\LyphTEC\Brand\logo_sqr_32.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
