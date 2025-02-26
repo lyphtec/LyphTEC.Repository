@@ -1,19 +1,18 @@
 ﻿using LyphTEC.Repository.Tests.Domain;
 
-namespace LyphTEC.Repository.Tests
+namespace LyphTEC.Repository.Tests;
+
+public class CommonRepositoryFixture
 {
-    public class CommonRepositoryFixture
+    public CommonRepositoryFixture()
     {
-        public CommonRepositoryFixture()
-        {
-            CustomerRepo = new InMemoryRepository<Customer>();
-        }
+        CustomerRepo = new InMemoryRepository<Customer>();
+    }
 
-        public IRepository<Customer> CustomerRepo { get; private set; }
+    public IRepository<Customer> CustomerRepo { get; private set; }
 
-        public void ClearRepo()
-        {
-            CustomerRepo.RemoveAll();
-        }
+    public void ClearRepo()
+    {
+        CustomerRepo.RemoveAll();
     }
 }

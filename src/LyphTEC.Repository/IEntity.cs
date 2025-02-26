@@ -1,7 +1,6 @@
-﻿namespace LyphTEC.Repository
+﻿namespace LyphTEC.Repository;
+
+public interface IEntity
 {
-    public interface IEntity
-    {
-        dynamic Id { get; set; }
-    }
+    dynamic Id { get; set; }
 }

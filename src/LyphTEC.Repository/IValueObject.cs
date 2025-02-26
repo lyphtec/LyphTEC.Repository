@@ -1,6 +1,5 @@
-﻿namespace LyphTEC.Repository
+﻿namespace LyphTEC.Repository;
+
+public interface IValueObject
 {
-    public interface IValueObject
-    {
-    }
 }

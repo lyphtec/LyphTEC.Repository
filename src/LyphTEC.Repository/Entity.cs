@@ -1,64 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LyphTEC.Repository
+namespace LyphTEC.Repository;
+
+public abstract class Entity : IEntity, IEquatable<Entity>, IEqualityComparer<Entity>
 {
-    public abstract class Entity : IEntity, IEquatable<Entity>, IEqualityComparer<Entity>
+    protected Entity()
     {
-        protected Entity()
+        DateCreatedUtc = DateTime.UtcNow;
+        DateUpdatedUtc = DateTime.UtcNow;
+    }
+
+    public virtual dynamic Id { get; set; }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is null)
         {
-            DateCreatedUtc = DateTime.UtcNow;
-            DateUpdatedUtc = DateTime.UtcNow;
+            return false;
         }
 
-        public virtual dynamic Id { get; set; }
-
-        public override int GetHashCode()
+        if (ReferenceEquals(this, obj))
         {
-            return Id.GetHashCode();
+            return true;
         }
 
-        public override bool Equals(object obj)
+        return obj.GetType() == typeof(Entity) && Equals((Entity)obj);
+    }
+
+    public bool Equals(Entity other)
+    {
+        if (other is null)
         {
-            if (ReferenceEquals(null, obj))
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(this, obj))
-            {
-                return true;
-            }
-
-            return obj.GetType() == typeof(Entity) && Equals((Entity)obj);
+            return false;
         }
 
-        public bool Equals(Entity other)
-        {
-            if (ReferenceEquals(null, other))
-            {
-                return false;
-            }
+        return ReferenceEquals(this, other) || other.Id.Equals(Id);
+    }
 
-            return ReferenceEquals(this, other) || other.Id.Equals(Id);
+    public virtual DateTime DateCreatedUtc { get; set; }
+    public virtual DateTime DateUpdatedUtc { get; set; }
+
+    public bool Equals(Entity x, Entity y)
+    {
+        return x.Equals(y);
+    }
+
+    public int GetHashCode(Entity obj)
+    {
+        if (obj.Id.GetType() == typeof(int))
+        {
+            return (int)obj.Id;
         }
 
-        public virtual DateTime DateCreatedUtc { get; set; }
-        public virtual DateTime DateUpdatedUtc { get; set; }
-
-        public bool Equals(Entity x, Entity y)
-        {
-            return x.Equals(y);
-        }
-
-        public int GetHashCode(Entity obj)
-        {
-            if (obj.Id.GetType() == typeof(int))
-            {
-                return (int)obj.Id;
-            }
-
-            return obj.GetHashCode();
-        }
+        return obj.GetHashCode();
     }
 }

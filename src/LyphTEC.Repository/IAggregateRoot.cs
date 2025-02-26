@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace LyphTEC.Repository
+namespace LyphTEC.Repository;
+
+public interface IAggregateRoot : IEntity
 {
-    public interface IAggregateRoot : IEntity
-    {
-        DateTime DateCreatedUtc { get; set; }
-        DateTime DateUpdatedUtc { get; set; }
-    }
+    DateTime DateCreatedUtc { get; set; }
+    DateTime DateUpdatedUtc { get; set; }
 }
