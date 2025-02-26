@@ -1,201 +1,174 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Composition;
 using System.Composition.Hosting;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using LyphTEC.Repository.Tests.Domain;
 using Xunit;
-using ServiceStack.Text;
 
 namespace LyphTEC.Repository.Tests
 {
-    public class InMemoryRepositoryTest : CommonRepositoryTest, IUseFixture<CommonRepositoryFixture>
+    public class InMemoryRepositoryTest : IClassFixture<CommonRepositoryFixture>
     {
+        private readonly CommonRepositoryFixture _fixture;
+
+        public InMemoryRepositoryTest(CommonRepositoryFixture fixture)
+        {
+            _fixture = fixture;
+        }
+
         [Fact]
         public void Repo_Init_UsesSameDatastore()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            var cust1 = NewCustomer();
-            CustomerRepo.Save(cust1);
+            var cust1 = Generator.Generate<Customer>();
+            _fixture.CustomerRepo.Save(cust1);
 
             var repo2 = new InMemoryRepository<Customer>();
 
-            Assert.True(repo2.Count() == 1);
+            Assert.Equal(1, repo2.Count());
 
             var cust2 = repo2.One(1);
             Assert.Equal(cust1, cust2);
-
-            DumpRepo();
         }
 
         [Fact]
         public void Save_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            var cust = NewCustomer();
+            var cust = Generator.Generate<Customer>();
 
-            CustomerRepo.Save(cust);
+            _fixture.CustomerRepo.Save(cust);
             
-            Assert.True((int)cust.Id == 1);
+            Assert.Equal(1, (int)cust.Id);
 
-            var cust2 = NewCustomer("Jack", "Wilson", "jwilson@acme.com");
-            cust2.Address = NewAddress();
-            CustomerRepo.Save(cust2);
+            var cust2 = Generator.Generate<Customer>();
+            cust2.Address = Generator.Generate<Address>();
+            _fixture.CustomerRepo.Save(cust2);
 
-            Assert.True(CustomerRepo.Count() == 2);
-            Assert.True((int)cust2.Id == 2);
-
-            DumpRepo();
+            Assert.Equal(2, _fixture.CustomerRepo.Count());
+            Assert.Equal(2, (int)cust2.Id);
         }
         
         [Fact]
         public void SaveAll_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            var custs = NewCustomers();
+            var custs = Generator.Generate<Customer>(3).ToList();
 
-            CustomerRepo.SaveAll(custs);
+            _fixture.CustomerRepo.SaveAll(custs);
 
-            Assert.True(CustomerRepo.Count() == 3);
-
-            DumpRepo();
+            Assert.Equal(3, _fixture.CustomerRepo.Count());
         }
 
         [Fact]
         public void Save_Update_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            var cust = NewCustomer();
-            CustomerRepo.Save(cust);
-
-            Console.WriteLine("Before update:");
-            cust.PrintDump();
+            var cust = Generator.Generate<Customer>();
+            _fixture.CustomerRepo.Save(cust);
 
             cust.Email = "updated";
 
-            var actual = CustomerRepo.Save(cust);
+            var actual = _fixture.CustomerRepo.Save(cust);
 
-            Assert.True(actual.Email.Equals("updated"));
-
-            Console.WriteLine("After update");
-            actual.PrintDump();
+            Assert.Equal(actual.Email, cust.Email);
         }
 
         [Fact]
         public void One_Linq_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            var cust = NewCustomer();
-            CustomerRepo.Save(cust);
+            var cust = Generator.Generate<Customer>(x => x.Email = "jsmith@acme.com");
+            _fixture.CustomerRepo.Save(cust);
 
-            var actual = CustomerRepo.One(x => x.Email.Equals("jsmith@acme.com"));
+            var actual = _fixture.CustomerRepo.One(x => x.Email.Equals(cust.Email));
 
             Assert.NotNull(actual);
             Assert.Equal(cust, actual);
-
-            actual.PrintDump();
         }
 
         [Fact]
         public void RemoveById_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            CustomerRepo.SaveAll(NewCustomers());
+            _fixture.CustomerRepo.SaveAll([.. Generator.Generate<Customer>(3)]);
 
-            CustomerRepo.Remove(2);
+            _fixture.CustomerRepo.Remove(2);
 
-            Assert.True(CustomerRepo.Count() == 2);
+            Assert.Equal(2, _fixture.CustomerRepo.Count());
 
-            var cust = CustomerRepo.One(2);
+            var cust = _fixture.CustomerRepo.One(2);
             Assert.Null(cust);
-
-            DumpRepo();
         }
 
         [Fact]
         public void Remove_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            var cust = NewCustomer();
-            CustomerRepo.Save(cust);
+            var cust = Generator.Generate<Customer>();
+            _fixture.CustomerRepo.Save(cust);
 
-            Assert.True(CustomerRepo.Count() == 1);
+            Assert.Equal(1, _fixture.CustomerRepo.Count());
 
-            CustomerRepo.Remove(cust);
+            _fixture.CustomerRepo.Remove(cust);
 
-            Assert.True(CustomerRepo.Count() == 0);
+            Assert.Equal(0, _fixture.CustomerRepo.Count());
         }
 
         [Fact]
         public void RemoveByIds_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            CustomerRepo.SaveAll(NewCustomers());
-            Assert.True(CustomerRepo.Count() == 3);
+            _fixture.CustomerRepo.SaveAll([.. Generator.Generate<Customer>(3)]);
+            Assert.Equal(3, _fixture.CustomerRepo.Count());
 
-            CustomerRepo.RemoveByIds(new[] { 1, 3 });
+            _fixture.CustomerRepo.RemoveByIds(new[] { 1, 3 });
 
-            Assert.True(CustomerRepo.Count() == 1);
-
-            DumpRepo();
+            Assert.Equal(1, _fixture.CustomerRepo.Count());
         }
 
         [Fact]
         public void All_Linq_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            CustomerRepo.SaveAll(NewCustomers());
-            CustomerRepo.Save(NewCustomer("James", "Harrison", "jharrison@foobar.com", "FooBar"));
+            _fixture.CustomerRepo.SaveAll([.. Generator.Generate<Customer>(3, x => x.Company = "ACME")]);
+            _fixture.CustomerRepo.Save(Generator.Generate<Customer>(x => x.Company = "FooBar"));
 
-            Assert.True(CustomerRepo.Count() == 4);
-            
-            DumpRepo();
+            Assert.Equal(4, _fixture.CustomerRepo.Count());
 
-            var actual = CustomerRepo.All(x => x.Company.Equals("ACME"));
+            var actual = _fixture.CustomerRepo.All(x => x.Company.Equals("ACME"));
 
-            Assert.True(actual.Count() == 3);
-
-            Console.WriteLine("After filter:");
-            actual.PrintDump();
+            Assert.Equal(3, actual.Count());
         }
 
         // async support in XUnit : http://bradwilson.typepad.com/blog/2012/01/xunit19.html
         [Fact]
         public async Task SaveAsync_Ok()
         {
-            ClearRepo();
+            _fixture.ClearRepo();
 
-            CustomerRepo.SaveAll(NewCustomers());
+            _fixture.CustomerRepo.SaveAll([.. Generator.Generate<Customer>(3, x => x.Company = "ACME")]);
 
-            var cust = new Customer
-                           {
-                               FirstName = "James",
-                               LastName = "Harry",
-                               Email = "jharry@foobar.com",
-                               Company = "FooBar"
-                           };
+            var cust = Generator.Generate<Customer>(x => x.Company = "FooBar");
 
             Console.WriteLine("ThreadId before await call: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
-            var actual = await CustomerRepoAsync.SaveAsync(cust);
+            var actual = await _fixture.CustomerRepoAsync.SaveAsync(cust);
 
             Console.WriteLine("ThreadId after await call: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
 
-            Assert.True((int)actual.Id == 4);
-            Assert.True(CustomerRepo.Count() == 4);
-
-            DumpRepo();
+            Assert.Equal(4, (int)actual.Id);
+            Assert.Equal(4, _fixture.CustomerRepo.Count());
         }
 
 
@@ -211,36 +184,16 @@ namespace LyphTEC.Repository.Tests
                 container.SatisfyImports(this);
             }
 
-            ClearRepo();
-            CustomerRepo.SaveAll(NewCustomers());
+            _fixture.ClearRepo();
+            _fixture.CustomerRepo.SaveAll([.. Generator.Generate<Customer>(3, x => x.Company = "ACME")]);
 
-            var cust = new Customer
-                           {
-                               FirstName = "MEF",
-                               LastName = "Head",
-                               Email = "mef@acme.com",
-                               Company = "MEFFY"
-                           };
+            var cust = Generator.Generate<Customer>(x => x.Company = "MEFFY");
 
             MefCustomerRepo.Save(cust);
 
-            Assert.True((int)cust.Id == 4);
-            Assert.True(CustomerRepo.Count() == 4);
-
-            DumpRepo();
+            Assert.Equal(4, (int)cust.Id);
+            Assert.Equal(4, _fixture.CustomerRepo.Count());
         }
 
-
-        #region IUseFixture<CustomerRepositoryFixture> Members
-
-        public void SetFixture(CommonRepositoryFixture data)
-        {
-            var repo = new InMemoryRepository<Customer>();
-
-            CustomerRepo = repo;
-            CustomerRepoAsync = repo;
-        }
-
-        #endregion
     }
 }

@@ -5,7 +5,7 @@
         <ProjectRoot>$(MSBuildProjectDirectory)\..</ProjectRoot>
         <ArtifactsDir>$(ProjectRoot)\_artifacts\$(Configuration)</ArtifactsDir>
         <NuGetToolsPath>$(ProjectRoot)\.nuget</NuGetToolsPath>
-        <NuGetExePath>D:\Development\Utils\nuget.exe</NuGetExePath>
+        <NuGetExePath>$(NuGetExePath)\nuget.exe</NuGetExePath>
         <ToolsPath>$(ProjectRoot)\_tools\</ToolsPath>
     </PropertyGroup>
 

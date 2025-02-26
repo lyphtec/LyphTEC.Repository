@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LyphTEC.Repository.Tests.Domain;
+﻿using LyphTEC.Repository.Tests.Domain;
 
 namespace LyphTEC.Repository.Tests
 {
     public class CommonRepositoryFixture
     {
+        public CommonRepositoryFixture()
+        {
+            var repo = new InMemoryRepository<Customer>();
 
+            CustomerRepo = repo;
+            CustomerRepoAsync = repo;
+        }
+
+        public IRepository<Customer> CustomerRepo { get; private set; }
+        public IRepositoryAsync<Customer> CustomerRepoAsync { get; private set; }
+
+        public void ClearRepo()
+        {
+            CustomerRepo.RemoveAll();
+        }
     }
 }

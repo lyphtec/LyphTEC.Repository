@@ -16,9 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LyphTEC.Repository.Tests", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C85989EE-10EB-4C94-BF79-2D277BE815D5}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\nuget.config = .nuget\nuget.config
+		.nuget\nuget.exe = .nuget\nuget.exe
+		.nuget\nuget.targets = .nuget\nuget.targets
 	EndProjectSection
 EndProject
 Global
